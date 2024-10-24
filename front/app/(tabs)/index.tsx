@@ -14,7 +14,6 @@ interface GoalsContainerProps {
 }
 
 function GoalsContainer(props: GoalsContainerProps) {
-
     return (
         <ThemedView style={style.goalsContainer}>
             <ThemedText type='defaultSemiBold' style={style.goalContainerTitle}>{props.title}</ThemedText>
@@ -60,7 +59,6 @@ export default function HomeScreen() {
         goals: ["Drink water", "drink coffe"],
         title: "Drink more water"
     }];
-
     return (
         <ThemedView style={pageStyle.container}>
             <ThemedView style={style.header}>
