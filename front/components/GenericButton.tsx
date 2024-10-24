@@ -7,13 +7,14 @@ interface GenericButtonProps {
     backgroundColor?: string;
     onPress?: (event: GestureResponderEvent) => void;
     buttonStyle?: ViewStyle | TextStyle | ImageStyle;
+    textColor?: string;
 }
 
 export default function GenericButton(props: GenericButtonProps) {
     return (
         <TouchableOpacity onPress={props.onPress}>
             <ThemedView style={[{ backgroundColor: props.backgroundColor ?? "orange" }, style.buttonContainer, props.buttonStyle]} >
-                <ThemedText type="defaultSemiBold">{props.text}</ThemedText>
+                <ThemedText style={{color: props.textColor}} type="defaultSemiBold">{props.text}</ThemedText>
             </ThemedView>
         </TouchableOpacity>
     )
