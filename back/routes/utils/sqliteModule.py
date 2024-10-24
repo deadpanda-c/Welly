@@ -67,6 +67,10 @@ class SqliteModule:
         element = self.cursor.fetchone()
         return element
 
+    def close_connection(self) -> None:
+        self.conn.close()
+        print("Database connection closed successfully")
+
 if __name__ == "__main__":
     db_name = "welly.db"
     table_name = "Users"
