@@ -41,7 +41,7 @@ def login():
     if not user or not bcrypt.check_password_hash(user.password, password):
         return jsonify({"message": "Incorrect username or password"}), 403
 
-    user_id = sqlite.get_element("user", "id", {"username": username, "email": email})
+    user_id = sqlite.get_element("user", "id", {"username": username})
     access_token = create_access_token(identity=user_id)
 
     sqlite.close_connection()

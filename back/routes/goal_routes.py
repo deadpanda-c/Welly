@@ -43,7 +43,7 @@ def add_favorite():
     data = request.get_json()
     current_user = get_jwt_identity()
 
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(id=current_user).first()
 
     if not user:
         return jsonify({"message": "User not found"}), 404
@@ -61,7 +61,7 @@ def remove_favorite():
     data = request.get_json()
     current_user = get_jwt_identity()
 
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(id=current_user).first()
 
     if not user:
         return jsonify({"message": "User not found"}), 404
@@ -77,3 +77,61 @@ def remove_favorite():
     db.session.commit()
 
     return jsonify({"message": "Favorite goal removed successfully"}), 200
+
+@goal_bp.route("/my_goals")
+@jwt_required()
+def get_my_goals():
+    current_user = get_jwt_identity()
+
+    print(current_user)
+
+    user = User.query.filter_by(id=current_user).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    favorites = FavoriteGoal.query.filter_by(user_id=user.id).all()
+
+    goal_ids = [favorite.goal_id for favorite in favorites]
+
+    goals = Goal.query.filter(Goal.id.in_(goal_ids)).all()
+
+    goals_array = []
+
+    for goal in goals:
+        goals_array.append({
+            "id": goal.id,
+            "title": goal.title,
+            "description": goal.description,
+            "minigoal": goal.minigoal
+        })
+
+    return jsonify({"favorites": goals_array}), 200
+
+# @goal_bp.route("/not_my_goals")
+# @jwt_required()
+# def get_my_goals():
+#     current_user = get_jwt_identity()
+
+#     user = User.query.filter_by(username=current_user).first()
+
+#     if not user:
+#         return jsonify({"message": "User not found"}), 404
+
+#     favorites = FavoriteGoal.query.filter_by(user_id=user.id).all()
+
+#     goal_ids = [favorite.goal_id for favorite in favorites]
+
+#     goals = Goal.query.filter(~Goal.id.in_(goal_ids)).all()
+
+#     goals_array = []
+
+#     for goal in goals:
+#         goals_array.append({
+#             "id": goal.id,
+#             "title": goal.title,
+#             "description": goal.description,
+#             "minigoal": goal.minigoal
+#         })
+
+#     return jsonify({"favorites": goals_array}), 200

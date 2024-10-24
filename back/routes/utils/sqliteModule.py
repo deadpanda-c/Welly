@@ -65,7 +65,7 @@ class SqliteModule:
         condition_values = tuple(condition.values())
         self.cursor.execute(f"SELECT {column_name} FROM {table_name} WHERE {condition_columns} = {condition_placeholders}", condition_values)
         element = self.cursor.fetchone()
-        return element
+        return element[0]
 
     def close_connection(self) -> None:
         self.conn.close()
