@@ -26,9 +26,9 @@ export default function Tab() {
       <Tabs.Screen
         name="chat"
         options={{
-          title: 'Chat',
+          title: 'Welly',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'chatbox-ellipses' : 'chatbox'} color={color} />
           ),
         }}
       />
@@ -37,7 +37,7 @@ export default function Tab() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'person' : 'person'} color={color} />
           ),
         }}
       />

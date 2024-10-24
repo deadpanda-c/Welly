@@ -31,6 +31,10 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack initialRouteName='index'>
         <Stack.Screen name="index" options={{ headerShown: false, title: "Login" }} />
+        <Stack.Screen name="goal/[id]" options={{
+          headerShown: true, headerTitle: '',  // Hide the title
+          title: '',
+        }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="daily-check" options={{ headerShown: true, title: "Daily Check" }} />
         <Stack.Screen name="+not-found" />

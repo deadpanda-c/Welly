@@ -20,7 +20,7 @@ function GoalsContainer(props: GoalsContainerProps) {
             <ThemedView style={style.goals}>
                 {(props.goals).map((goal, index) => (
                     <ThemedView key={index} style={style.cardContainer}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => router.navigate(`/goal/${goal.id}`)}>
                         <CardElement goal={goal} /></TouchableOpacity>
                     </ThemedView>
                 ))}
@@ -30,34 +30,41 @@ function GoalsContainer(props: GoalsContainerProps) {
 }
 
 export default function HomeScreen() {
-    const mygoals = [{
+    const mygoals: GoalProps[] = [{
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 1
     }, {
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 2
     }, {
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 2
     }, {
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 2
     }, {
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 2
     }, {
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 2
     }, {
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
-        title: "Drink more water"
+        title: "Drink more water",
+        id: 2
     }];
     return (
         <ThemedView style={pageStyle.container}>
