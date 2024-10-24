@@ -1,39 +1,24 @@
-#!./.venv/bin/python3
+from flask import Flask
+from config import Config
+from extensions import db, bcrypt, jwt
+from routes import init_routes
 
-import flask
-import json
-from langchain_ollama import OllamaLLM
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-ollama_llm = OllamaLLM(model="llama3.1", base_url="http://10.10.75.205:11434")
+    # Initialisation des extensions
+    db.init_app(app)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
 
-"""
-Routes and views for the flask application.
+    # Initialisation des routes
+    init_routes(app)
 
-- / : Home page
-
-- /ai : Chatbot page
-
-- /home : Home page
-
--
-"""
-app = flask.Flask(__name__)
-
-@app.route('/')
-def index():
-    return json.dumps({'hello': 'world'})
-
-@app.route('/ai', methods=['POST'])
-def chat():
-    data = flask.request.get_json()
-
-    response = ollama_llm(data["content"])
-
-    return json.dumps({'chat': response})
-
-@app.route("/home")
-def home():
-    return json.dumps({'home': 'page'})
+    return app
 
 if __name__ == '__main__':
+    app = create_app()
+    with app.app_context():
+        db.create_all()  # Crée la base de données avec les modèles
     app.run(debug=True)
