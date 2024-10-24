@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --tunnel",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -39,6 +39,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/jest": "^29.5.12",
+    "@types/node": "^22.7.9",
     "@types/react": "~18.2.45",
     "@types/react-test-renderer": "^18.0.7",
     "jest": "^29.2.1",
