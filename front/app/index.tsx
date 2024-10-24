@@ -15,29 +15,34 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginPage() {
     const tryLogin = async (username, password) => {
-      const data = {
-        "username": username,
-        "password": password
-      }
-      const res = await fetch("http://10.10.76.36:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      }).then(res => res.json())
-      // store token into local storage
-
-      const storeData = async (value) => {
-        try {
-          console.log(value)
-          await AsyncStorage.setItem('token', value)
-        } catch (e) {
-          console.error(e)
+      try {
+        const data = {
+          "username": username,
+          "password": password
         }
+
+        const res = await fetch("http://10.10.76.36:5000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        }).then(res => res.json())
+        // store token into local storage
+
+        const storeData = async (value) => {
+          try {
+            console.log(value)
+            await AsyncStorage.setItem('token', value)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+        storeData(res["access_token"])
+        router.navigate("(tabs)")
+      } catch (e) {
+        console.error(e)
       }
-      storeData(res["access_token"])
-      router.navigate("(tabs)")
     }
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -56,7 +61,7 @@ export default function LoginPage() {
             <ThemedView  style={pageStyle.centeredBtn}>
                 <Button
                 title='Log in'
-                onPress={() => tryLogin()}
+                onPress={() => tryLogin(username, password)}
                 ></Button>
 
                 <Button
