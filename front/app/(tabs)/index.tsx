@@ -200,6 +200,7 @@ const style = StyleSheet.create({
         aspectRatio: 1,
     },
     dailyCheck: {
+        minHeight: 50,
         height: "4%",
         width: "50%",
         marginBottom: 20
