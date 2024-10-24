@@ -2,7 +2,6 @@
 
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-
 import routes.utils as utils
 
 userInfos_bp = Blueprint('userInfos', __name__)
@@ -17,10 +16,9 @@ def get_user_infos():
 
     print(user_infos)
     sqlite.close_connection()
-    return jsonify({"msg": "Hello, World!"})
-
-
-if __name__ == "__main__":
-    pass
-
-
+    return jsonify({
+        "user_infos": {
+            "username": user_infos[1],
+            "email": user_infos[2]
+        }
+    }), 200
