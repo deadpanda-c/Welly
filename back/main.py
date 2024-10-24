@@ -18,18 +18,15 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def index():
-    # get the current user informations
-
-
-    return 'Hello, World!'
+    return json.dumps({'hello': 'world'})
 
 @app.route("/ai")
 def chat():
-    return "Chatbot"
+    return json.dumps({'chat': 'bot'})
 
 @app.route("/home")
 def home():
-    return "Home page"
+    return json.dumps({'home': 'page'})
 
 if __name__ == '__main__':
     app.run(debug=True)
