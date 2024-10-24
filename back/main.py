@@ -2,6 +2,9 @@
 
 import flask
 import json
+from langchain_ollama import OllamaLLM
+
+ollama_llm = OllamaLLM(model="llama3.1", base_url="http://10.10.75.205:11434")
 
 """
 Routes and views for the flask application.
@@ -23,8 +26,10 @@ def index():
 @app.route('/ai', methods=['POST'])
 def chat():
     data = flask.request.get_json()
-    print(data["test"])
-    return json.dumps({'chat': 'bot'})
+
+    response = ollama_llm(data["content"])
+
+    return json.dumps({'chat': response})
 
 @app.route("/home")
 def home():
