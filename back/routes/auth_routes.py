@@ -2,11 +2,13 @@ from flask import Blueprint, request, jsonify
 from models.user import User
 from extensions import db, bcrypt, jwt
 from flask_jwt_extended import create_access_token
+import routes.utils as utils
 
 auth_bp = Blueprint("auth_bp", __name__)
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
+    sqlite = utils.get_module_sqlite("./instance/users.db")
     data = request.get_json()
     email = data.get("email")
     username = data.get("username")
@@ -21,12 +23,15 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    access_token = create_access_token(identity=username)
+    user_id = sqlite.get_element("user", "id", {"email": email})
+    access_token = create_access_token(identity=user_id)
 
+    sqlite.close_connection()
     return jsonify({"access_token": access_token}), 201
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
+    sqlite = utils.get_module_sqlite("./instance/users.db")
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")
@@ -36,6 +41,9 @@ def login():
     if not user or not bcrypt.check_password_hash(user.password, password):
         return jsonify({"message": "Incorrect username or password"}), 403
 
-    access_token = create_access_token(identity=username)
+    user_id = sqlite.get_element("user", "id", {"username": username, "email": email})
+    access_token = create_access_token(identity=user_id)
+
+    sqlite.close_connection()
 
     return jsonify({"access_token": access_token}), 200
