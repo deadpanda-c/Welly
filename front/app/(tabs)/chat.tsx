@@ -54,6 +54,7 @@ export default function Chat() {
                 <TextInput
                     style={[style.input, {color: color}]}
                     placeholder="Type a message..."
+                    placeholderTextColor={color}
                     value={message}
                     onChangeText={setMessage}
                 />
