@@ -14,11 +14,39 @@ export default function Chat() {
 
     const [message, setMessage] = useState('');
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         if (message.trim() === '') return;
+
         setMygoals([...mygoals, { sender: 'source', text: message }]);
+
         setMessage('');
+
+        try {
+            const response = await fetch('http://10.10.75.205:5000/ai', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ content: message }),
+            })
+            .then(res => res.json())
+            .catch(error => {
+                throw(error)
+            })
+
+            if (response) {
+                setMygoals(prevGoals => [
+                    ...prevGoals,
+                    { sender: 'destination', text: response["chat"] }
+                ]);
+            } else {
+                console.error('Erreur lors de la requête à l\'API');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la requête:', error);
+        }
     };
+
 
     const theme = useColorScheme() ?? 'light';
 
