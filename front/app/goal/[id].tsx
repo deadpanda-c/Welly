@@ -10,24 +10,26 @@ export default function goal() {
     const { id, isMine } = useLocalSearchParams();
     const goal: GoalProps = {
         title: "Drink more water",
-        description: " reiufhzifhnzlkuflkr fufeiurahialjrzhuizqbefffhbz foihruoizfheiuzgfreugrfnoioijzoiher reiufhzifhnzlkuflkr fufeiurahialjrzhuizqbefffhbz foihruoizfheiuzgfreugrfnoioijzoiher reiufhzifhnzlkuflkr fufeiurahialjrzhuizqbefffhbz foihruoizfheiuzgfreugrfnoioijzoiher reiufhzifhnzlkuflkr fufeiurahialjrzhuizqbefffhbz foihruoizfheiuzgfreugrfnoioijzoiher ",
+        description: " reiufhzifhnzlkuflkr fufeiurahialjrzhuizqbefffhbz",
         goals: ["Drink water", "Smoke a lot", "Testing sucks"],
         id: Number(id)
     }
 
     return (
         <ThemedView style={[style.container]}>
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
             <ThemedView style={style.body}>
                 <ThemedText style={style.title}>{goal.title}</ThemedText>
                 <ThemedText style={style.description}>{goal.description}</ThemedText>
                 <ThemedView style={style.steps}>{goal.goals.map((elem, index) => {
                     return (
-                        <ThemedText key={index}>{elem}</ThemedText>
+                        <ThemedText type="defaultSemiBold" key={index}>{elem}</ThemedText>
                     )
                 })}</ThemedView>
                 <ThemedView style={style.button}>
-                    <GenericButton text={isMine ? "Remove" : "Add"} backgroundColor={isMine ? "red" : "green"} /></ThemedView>
+                    <GenericButton textColor="white" text={isMine ? "Remove" : "Add"} backgroundColor={isMine ? "red" : "green"} /></ThemedView>
             </ThemedView>
+            </ScrollView>
         </ThemedView>
     )
 }
@@ -39,36 +41,40 @@ const style = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: "flex-start",
     },
     body: {
         width: "80%",
+        paddingVertical: 20,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-around",
-        alignSelf: "center"
+        justifyContent: "flex-start", // Start items from top
+        alignSelf: "center",
     },
     title: {
-        fontSize: 20,
-        height: "10%",
+        fontSize: 24, // Slightly increase font size for more impact
         textAlign: "center",
-        alignSelf: "center"
+        alignSelf: "center",
+        marginBottom: 30, // Add more margin between the title and the next element
     },
     description: {
-        height: "25%",
-        textAlign: "center"
+        textAlign: "center",
+        marginBottom: 30,
     },
     button: {
-        height: "10%",
-        width: "50%"
+        marginTop: 20,
+        marginBottom: 40,
+        height: 50,
+        width: "60%",
     },
     steps: {
-        height: "40%",
         width: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "space-around"
-    }
-})
+        justifyContent: "space-around",
+        gap: 10,
+        marginBottom: 20,
+    },
+});
