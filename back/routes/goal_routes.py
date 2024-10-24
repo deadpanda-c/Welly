@@ -22,7 +22,7 @@ def create_goal():
     db.session.add(new_goal)
     db.session.commit()
 
-    return jsonify({'goal': new_goal.id})
+    return jsonify({'goal': new_goal.id}), 200
 
 @goal_bp.route('/goal')
 def get_goal():
@@ -35,7 +35,7 @@ def get_goal():
     if not goal:
         return jsonify({"message": "Goal already exists"}), 400
 
-    return jsonify({'title': goal.title, 'description': goal.description, 'minigoal': goal.minigoal})
+    return jsonify({'title': goal.title, 'description': goal.description, 'minigoal': goal.minigoal}), 200
 
 @goal_bp.route("/add_favorite", methods=["POST"])
 @jwt_required()
@@ -59,7 +59,7 @@ def add_favorite():
     db.session.add(new_favorite)
     db.session.commit()
 
-    return jsonify({'favorite': new_favorite.id})
+    return jsonify({'favorite': new_favorite.id}), 200
 
 @goal_bp.route("/remove_favorite", methods=["POST"])
 @jwt_required()
