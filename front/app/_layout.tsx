@@ -31,6 +31,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack initialRouteName='index'>
         <Stack.Screen name="index" options={{ headerShown: false, title: "Login" }} />
+        <Stack.Screen name="register" options={{ headerShown: false, title: "Register" }} />
         <Stack.Screen name="goal/[id]" options={{
           headerShown: true, headerTitle: '',  // Hide the title
           title: '',

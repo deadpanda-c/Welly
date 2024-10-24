@@ -9,59 +9,67 @@ import { ProfilePicture } from '@/components/ProfilePicture';
 import { pageStyle } from '@/styles/page.style';
 import { router } from 'expo-router';
 
-import RegisterPage from './register';
+// localStorage
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function LoginPage() {
-    const tryLogin = async (username, password) => {
-      const data = {
-        "username": username,
-        "password": password
-      }
-      const res = await fetch("http://10.10.76.36:5000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      }).then(res => res.json())
-      // store token into local storage
 
-      const storeData = async (value) => {
-        try {
-          console.log(value)
-          await AsyncStorage.setItem('token', value)
-        } catch (e) {
-          console.error(e)
+export default function RegisterPage() {
+    const tryRegister = async (username, email, password) => {
+      try {
+        const data = {
+          "username": username,
+          "email": email,
+          "password": password
         }
+        const res = await fetch("http://10.10.76.36:5000/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        }).then(res => res.json())
+
+        // store token into local storage
+        const storeData = async (value) => {
+          try {
+            console.log(value)
+            await AsyncStorage.setItem('token', value)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+        storeData(res["access_token"])
+        router.navigate("(tabs)")
+
+      } catch (e) {
+        console.error(e)
       }
-      storeData(res["access_token"])
-      router.navigate("(tabs)")
     }
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+
     const usernameSetter = (value : string) => {
         setUsername(value)
     }
     const passwordSetter = (value : string) => {
         setPassword(value)
     }
+    const emailSetter = (value : string) => {
+      setEmail(value)
+    }
     return (
         <ThemedView style={pageStyle.container}>
             <ThemedView style={{alignItems:"center", marginTop:"60%"}}>
                 <InfoDisplay text="Username" editing={false} setter={usernameSetter}></InfoDisplay>
+                <InfoDisplay text="Email" editing={false} setter={emailSetter}></InfoDisplay>
                 <InfoDisplay text="Password" editing={false} setter={passwordSetter}></InfoDisplay>
             </ThemedView>
             <ThemedView  style={pageStyle.centeredBtn}>
                 <Button
-                title='Log in'
-                onPress={() => tryLogin()}
-                ></Button>
-
-                <Button
                 title='Register'
-                onPress={() => router.navigate("register")}
+                onPress={() => tryRegister(username, email, password)}
                 ></Button>
             </ThemedView>
         </ThemedView>

@@ -8,6 +8,9 @@ import { CardElement } from '@/components/CardElement';
 import GenericButton from '@/components/GenericButton';
 import { router } from 'expo-router';
 
+// localStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 interface GoalsContainerProps {
     title: string;
     goals: GoalProps[];
@@ -30,6 +33,19 @@ function GoalsContainer(props: GoalsContainerProps) {
 }
 
 export default function HomeScreen() {
+    const getData = async () => {
+      try {
+        const value = await AsyncStorage.getItem('token');
+        if (value !== null) {
+          console.log(value);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    getData();
+
     const mygoals: GoalProps[] = [{
         description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
         goals: ["Drink water", "drink coffe"],
