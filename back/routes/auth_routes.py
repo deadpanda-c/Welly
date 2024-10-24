@@ -8,7 +8,7 @@ auth_bp = Blueprint("auth_bp", __name__)
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    sqlite = utils.get_module_sqlite("./instance/users.db")
+    sqlite = utils.get_module_sqlite("./instance/welly.db")
     data = request.get_json()
     email = data.get("email")
     username = data.get("username")
@@ -31,7 +31,7 @@ def register():
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    sqlite = utils.get_module_sqlite("./instance/users.db")
+    sqlite = utils.get_module_sqlite("./instance/welly.db")
     data = request.get_json()
     username = data.get("username")
     password = data.get("password")

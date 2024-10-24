@@ -11,7 +11,7 @@ userInfos_bp = Blueprint('userInfos', __name__)
 @jwt_required()
 def get_user_infos():
     current_user_id = get_jwt_identity()[0]
-    sqlite = utils.SqliteModule("./instance/users.db")
+    sqlite = utils.SqliteModule("./instance/welly.db")
 
     user_infos = sqlite.get_row("user", {"id": current_user_id})
 
