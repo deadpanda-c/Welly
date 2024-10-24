@@ -20,8 +20,10 @@ app = flask.Flask(__name__)
 def index():
     return json.dumps({'hello': 'world'})
 
-@app.route("/ai")
+@app.route('/ai', methods=['POST'])
 def chat():
+    data = flask.request.get_json()
+    print(data["test"])
     return json.dumps({'chat': 'bot'})
 
 @app.route("/home")
