@@ -10,7 +10,18 @@ import { pageStyle } from '@/styles/page.style';
 
 export default function HomeScreen() {
     const [editing, setEditing] = useState(false);
-
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const usernameSetter = (value : string) => {
+        setUsername(value)
+    }
+    const passwordSetter = (value : string) => {
+        setPassword(value)
+    }
+    const emailSetter = (value : string) => {
+        setEmail(value)
+    }
     useEffect(() => {
       const changeEdit = async () => {
         setEditing(true);
@@ -25,9 +36,11 @@ export default function HomeScreen() {
             </ThemedView>
             <ScrollView>
                 <ProfilePicture name="Bob" image=".../assets/images/rukiaangel.png"></ProfilePicture>
-                <InfoDisplay text="Username" editing={editing} ></InfoDisplay>
-                <InfoDisplay text="Email" editing={editing}></InfoDisplay>
-                <InfoDisplay text="Password" editing={editing}></InfoDisplay>
+                <ThemedView style={{alignItems:"center"}}>
+                    <InfoDisplay text="Username" editing={editing} setter={usernameSetter}></InfoDisplay>
+                    <InfoDisplay text="Email" editing={editing} setter={emailSetter}></InfoDisplay>
+                    <InfoDisplay text="Password" editing={editing} setter={passwordSetter}></InfoDisplay>
+                </ThemedView>
                 <ThemedView  style={pageStyle.centeredBtn}>
                     <Button disabled={editing ? false : true} title='Log Out' ></Button>
                 </ThemedView>

@@ -11,6 +11,9 @@ import React, { useEffect, useState } from 'react';
 const host = process.env.EXPO_PUBLIC_HOST;
 
 // Interfaces
+// localStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 interface GoalsContainerProps {
     title: string;
     goals: GoalProps[];
@@ -41,6 +44,19 @@ function GoalsContainer(props: GoalsContainerProps) {
 }
 
 export default function HomeScreen() {
+
+    const getData = async () => {
+        try {
+          const value = await AsyncStorage.getItem('token');
+          if (value !== null) {
+            return value;
+          }
+        } catch (e) {
+          console.error(e);
+        }
+        return undefined;
+      }
+
     const [mygoals, setMygoals] = useState<GoalProps[]>([]);  // Initialize with an empty array
     const [notmygoals, setNotMygoals] = useState<GoalProps[]>([]);
     const [loading, setLoading] = useState(true); // Loading state
@@ -48,11 +64,12 @@ export default function HomeScreen() {
     // Fetch goals from the API
     const fetchGoals = async () => {
         try {
+            const token = await getData();
             const response = await fetch(`http://${host}:5000/my_goals`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyOTgwMTAxNCwianRpIjoiZDE1NWNmMzMtZDFjZS00MTE1LTg0NDAtZWMwYjkzNzIwNjMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzI5ODAxMDE0LCJleHAiOjE3Mjk4MDE5MTR9.dckzkNLaF-1fKvtq6SWOLpDoURgq74UrMmqPVLMj-WM`,
+                    'Authorization': `Bearer ${token}`,
                 },
             })
             .then(res => res.json())
@@ -75,11 +92,12 @@ export default function HomeScreen() {
 
     const fetchNotGoals = async () => {
         try {
+            const token = await getData();
             const response = await fetch(`http://${host}:5000/not_my_goals`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyOTgwMTAxNCwianRpIjoiZDE1NWNmMzMtZDFjZS00MTE1LTg0NDAtZWMwYjkzNzIwNjMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzI5ODAxMDE0LCJleHAiOjE3Mjk4MDE5MTR9.dckzkNLaF-1fKvtq6SWOLpDoURgq74UrMmqPVLMj-WM`,
+                    'Authorization': `Bearer ${token}`,
                 },
             })
             .then(res => res.json())

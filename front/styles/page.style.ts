@@ -17,9 +17,8 @@ export const pageStyle = StyleSheet.create({
 
     infoDisplayPosition: {
         marginBottom: 15,
-        marginLeft: 40,
+        width: 250,
         height: 80,
-        width: "100%",
     },
     infoInput: {
         paddingLeft:20,
@@ -36,7 +35,6 @@ export const pageStyle = StyleSheet.create({
         backgroundColor:"#ffffff55",
         color: "white",
         height: "50%",
-        width: "60%",
         marginLeft: "5%",
     },
     centeredBtn: {
