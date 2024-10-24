@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { pageStyle } from "@/styles/page.style";
-import { StyleSheet, TextInput, useColorScheme } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, useColorScheme } from 'react-native';
 import React, { useState } from 'react';
 
 export default function Chat() {
@@ -22,17 +22,18 @@ export default function Chat() {
         setMessage('');
 
         try {
-            const response = await fetch('http://10.10.75.205:5000/ai', {
+            const host = process.env.EXPO_PUBLIC_HOST;
+            const response = await fetch(`http://${host}:5000/ai`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ content: message }),
             })
-            .then(res => res.json())
-            .catch(error => {
-                throw(error)
-            })
+                .then(res => res.json())
+                .catch(error => {
+                    throw (error)
+                })
 
             if (response) {
                 setMygoals(prevGoals => [
@@ -63,24 +64,25 @@ export default function Chat() {
             <ThemedView style={style.topBar}>
                 <ThemedText style={style.topBarText}>Welly</ThemedText>
             </ThemedView>
-
-            <ThemedView style={style.chatContainer}>
-                {mygoals.map((message, index) => (
-                    <ThemedView
-                        key={index}
-                        style={[
-                            style.messageContainer,
-                            message.sender === "source" ? style.sourceMessage : style.destinationMessage
-                        ]}
-                    >
-                        <ThemedText style={style.messageText}>{message.text}</ThemedText>
-                    </ThemedView>
-                ))}
-            </ThemedView>
+            <ScrollView >
+                <ThemedView style={style.chatContainer}>
+                    {mygoals.map((message, index) => (
+                        <ThemedView
+                            key={index}
+                            style={[
+                                style.messageContainer,
+                                message.sender === "source" ? style.sourceMessage : style.destinationMessage
+                            ]}
+                        >
+                            <ThemedText style={style.messageText}>{message.text}</ThemedText>
+                        </ThemedView>
+                    ))}
+                </ThemedView>
+            </ScrollView>
 
             <ThemedView style={style.inputContainer}>
                 <TextInput
-                    style={[style.input, {color: color}]}
+                    style={[style.input, { color: color }]}
                     placeholder="Type a message..."
                     placeholderTextColor={color}
                     value={message}
