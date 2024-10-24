@@ -3,26 +3,36 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { pageStyle } from '@/styles/page.style';
 import FlameSvg from "@/assets/icons/flame.svg";
-import { GoalProps } from '@/interfaces/interface';
 import { CardElement } from '@/components/CardElement';
 import GenericButton from '@/components/GenericButton';
 import { router } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 
+const host = process.env.EXPO_PUBLIC_HOST;
+
+// Interfaces
 interface GoalsContainerProps {
     title: string;
     goals: GoalProps[];
 }
 
-function GoalsContainer(props: GoalsContainerProps) {
+interface GoalProps {
+    description: string;
+    goals: string[];
+    title: string;
+    id: number;
+}
 
+function GoalsContainer(props: GoalsContainerProps) {
     return (
         <ThemedView style={style.goalsContainer}>
             <ThemedText type='defaultSemiBold' style={style.goalContainerTitle}>{props.title}</ThemedText>
             <ThemedView style={style.goals}>
-                {(props.goals).map((goal, index) => (
+                {props.goals.map((goal, index) => (
                     <ThemedView key={index} style={style.cardContainer}>
                         <TouchableOpacity onPress={() => router.navigate(`/goal/${goal.id}`)}>
-                        <CardElement goal={goal} /></TouchableOpacity>
+                            <CardElement goal={goal} />
+                        </TouchableOpacity>
                     </ThemedView>
                 ))}
             </ThemedView>
@@ -31,42 +41,78 @@ function GoalsContainer(props: GoalsContainerProps) {
 }
 
 export default function HomeScreen() {
-    const mygoals: GoalProps[] = [{
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 1
-    }, {
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 2
-    }, {
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 2
-    }, {
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 2
-    }, {
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 2
-    }, {
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 2
-    }, {
-        description: "lorem ipsuuefhzidh fdrink ore watzr to be healthy",
-        goals: ["Drink water", "drink coffe"],
-        title: "Drink more water",
-        id: 2
-    }];
+    const [mygoals, setMygoals] = useState<GoalProps[]>([]);  // Initialize with an empty array
+    const [notmygoals, setNotMygoals] = useState<GoalProps[]>([]);
+    const [loading, setLoading] = useState(true); // Loading state
+
+    // Fetch goals from the API
+    const fetchGoals = async () => {
+        try {
+            const response = await fetch(`http://${host}:5000/my_goals`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyOTgwMTAxNCwianRpIjoiZDE1NWNmMzMtZDFjZS00MTE1LTg0NDAtZWMwYjkzNzIwNjMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzI5ODAxMDE0LCJleHAiOjE3Mjk4MDE5MTR9.dckzkNLaF-1fKvtq6SWOLpDoURgq74UrMmqPVLMj-WM`,
+                },
+            })
+            .then(res => res.json())
+            .catch(error => {
+                throw(error)
+            })
+
+            if (response) {
+                if (response["favorites"])
+                    setMygoals(response["favorites"]);
+            } else {
+                console.error('Erreur lors de la requête à l\'API');
+            }
+        } catch (error) {
+            console.error('API request error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchNotGoals = async () => {
+        try {
+            const response = await fetch(`http://${host}:5000/not_my_goals`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyOTgwMTAxNCwianRpIjoiZDE1NWNmMzMtZDFjZS00MTE1LTg0NDAtZWMwYjkzNzIwNjMwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6MSwibmJmIjoxNzI5ODAxMDE0LCJleHAiOjE3Mjk4MDE5MTR9.dckzkNLaF-1fKvtq6SWOLpDoURgq74UrMmqPVLMj-WM`,
+                },
+            })
+            .then(res => res.json())
+            .catch(error => {
+                throw(error)
+            })
+
+            if (response) {
+                if (response["not_favorites"])
+                    setNotMygoals(response["not_favorites"]);
+            } else {
+                console.error('Erreur lors de la requête à l\'API');
+            }
+        } catch (error) {
+            console.error('API request error:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Trigger fetchGoals when the component mounts
+    useEffect(() => {
+        fetchGoals();
+        fetchNotGoals();
+    }, []);
+
+    if (loading) {
+        return (
+            <ThemedView style={pageStyle.container}>
+                <ThemedText>Loading...</ThemedText>
+            </ThemedView>
+        );
+    }
 
     return (
         <ThemedView style={pageStyle.container}>
@@ -80,10 +126,10 @@ export default function HomeScreen() {
             <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
                 <ThemedView style={style.body}>
                     <ThemedView style={style.dailyCheck}>
-                        <GenericButton text='Daily Check' onPress={() => {router.navigate("/daily-check")}} />
+                        <GenericButton text='Daily Check' onPress={() => { router.navigate("/daily-check") }} />
                     </ThemedView>
                     <GoalsContainer goals={mygoals} title={"My goals"} />
-                    <GoalsContainer goals={mygoals} title={"Discover"} />
+                    <GoalsContainer goals={notmygoals} title={"Discover"} />
                 </ThemedView>
             </ScrollView>
         </ThemedView>

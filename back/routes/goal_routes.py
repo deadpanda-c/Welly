@@ -138,4 +138,4 @@ def get_not_my_goals():
             "minigoal": goal.minigoal
         })
 
-    return jsonify({"favorites": goals_array}), 200
+    return jsonify({"not_favorites": goals_array}), 200
